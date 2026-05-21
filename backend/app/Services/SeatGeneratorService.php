@@ -17,8 +17,6 @@ class SeatGeneratorService
         $layout = $this->registry->get($aircraftType);
         $seats = $layout->allSeats();
 
-        $keys = array_rand($seats, $count);
-
-        return array_map(fn($k) => $seats[$k], (array) $keys);
+        return collect($seats)->random($count)->values()->toArray();
     }
 }
