@@ -29,4 +29,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => $e->getMessage(),
             ], 409);
         });
+
+        $exceptions->render(function (\App\Exceptions\UnsupportedAircraftException $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], 422);
+        });
     })->create();

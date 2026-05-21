@@ -74,7 +74,7 @@ class SeatGeneratorServiceTest extends TestCase
 
     public function test_throws_exception_for_unsupported_aircraft(): void
     {
-        $this->expectException(\Illuminate\Http\Exceptions\HttpResponseException::class);
+        $this->expectException(\App\Exceptions\UnsupportedAircraftException::class);
         $this->service->generate('Boeing 747');
     }
 }

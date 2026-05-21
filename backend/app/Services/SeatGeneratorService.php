@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Services\Aircraft\AircraftLayoutRegistry;
+
 class SeatGeneratorService
 {
     public function __construct(

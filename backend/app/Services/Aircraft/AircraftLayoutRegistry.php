@@ -2,6 +2,8 @@
 
 namespace App\Services\Aircraft;
 
+use App\Exceptions\UnsupportedAircraftException;
+
 class AircraftLayoutRegistry
 {
     public function get(string $type): AircraftLayout
@@ -9,7 +11,7 @@ class AircraftLayoutRegistry
         $layouts = config('aircraft.layouts');
 
         if (!isset($layouts[$type])) {
-            abort(422, "Aircraft type '$type' is not supported.");
+            throw new UnsupportedAircraftException($type);
         }
 
         $layout = $layouts[$type];
