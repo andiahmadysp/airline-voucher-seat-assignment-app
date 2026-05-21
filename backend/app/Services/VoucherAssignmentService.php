@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\VoucherAlreadyExistsException;
 use App\Models\Voucher;
 
 class VoucherAssignmentService
@@ -19,6 +20,10 @@ class VoucherAssignmentService
 
     public function assign(array $data): array
     {
+        if ($this->isAlreadyAssigned($data['flightNumber'], $data['date'])) {
+            throw new VoucherAlreadyExistsException($data['flightNumber'], $data['date']);
+        }
+
         $seats = $this->seatGenerator->generate($data['aircraft']);
 
         Voucher::create([
