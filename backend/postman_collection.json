@@ -1,0 +1,309 @@
+{
+  "info": {
+    "name": "Voucher Seat Assignment API",
+    "_postman_id": "voucher-seat-assignment-api",
+    "description": "API for checking and generating voucher seat assignments for airline flights.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Check Voucher",
+      "item": [
+        {
+          "name": "Check - not yet assigned",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/check",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"GA102\",\n  \"date\": \"2025-07-12\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Returns exists: false when no voucher has been generated for the given flight + date."
+          },
+          "response": [
+            {
+              "name": "200 - Not assigned",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"exists\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Check - already assigned",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/check",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"GA102\",\n  \"date\": \"2025-07-12\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Returns exists: true when a voucher has already been generated for this flight + date."
+          },
+          "response": [
+            {
+              "name": "200 - Already assigned",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"exists\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "Check - invalid flight number",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/check",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"invalid\",\n  \"date\": \"2025-07-12\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Flight number must match ^[A-Z]{2}\\d{1,4}$ (e.g. GA102)."
+          },
+          "response": [
+            {
+              "name": "422 - Validation error",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n    \"flightNumber\": [\n      \"Flight number format is invalid (e.g. GA102).\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Check - invalid date format",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/check",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flightNumber\": \"GA102\",\n  \"date\": \"12-07-2025\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Date must be in YYYY-MM-DD format."
+          },
+          "response": [
+            {
+              "name": "422 - Validation error",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n    \"date\": [\n      \"Date must be in YYYY-MM-DD format.\"\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Generate Voucher",
+      "item": [
+        {
+          "name": "Generate - success",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah\",\n  \"id\": \"98123\",\n  \"flightNumber\": \"GA102\",\n  \"date\": \"2025-07-12\",\n  \"aircraft\": \"Airbus 320\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Generates 3 unique random seats for the given flight and saves the voucher to the database."
+          },
+          "response": [
+            {
+              "name": "200 - Seats generated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"seats\": [\"3B\", \"7C\", \"14D\"]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Generate - ATR aircraft",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Budi\",\n  \"id\": \"CR001\",\n  \"flightNumber\": \"ID301\",\n  \"date\": \"2025-08-01\",\n  \"aircraft\": \"ATR\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate - Boeing 737 Max",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dewi\",\n  \"id\": \"CR002\",\n  \"flightNumber\": \"JT505\",\n  \"date\": \"2025-08-15\",\n  \"aircraft\": \"Boeing 737 Max\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate - duplicate (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah\",\n  \"id\": \"98123\",\n  \"flightNumber\": \"GA102\",\n  \"date\": \"2025-07-12\",\n  \"aircraft\": \"Airbus 320\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Same flight + date as the success request. Run after 'Generate - success' to trigger the 409."
+          },
+          "response": [
+            {
+              "name": "409 - Already generated",
+              "status": "Conflict",
+              "code": 409,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"message\": \"Vouchers for flight GA102 on 2025-07-12 have already been generated.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Generate - unsupported aircraft (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah\",\n  \"id\": \"98123\",\n  \"flightNumber\": \"GA102\",\n  \"date\": \"2025-07-12\",\n  \"aircraft\": \"Boeing 747\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Supported aircraft: ATR, Airbus 320, Boeing 737 Max."
+          },
+          "response": [
+            {
+              "name": "422 - Unsupported aircraft",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n    \"aircraft\": [\n      \"Aircraft type is not supported.\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Generate - missing fields (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "All fields required: name, id, flightNumber, date, aircraft."
+          },
+          "response": [
+            {
+              "name": "422 - All fields missing",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"message\": \"The given data was invalid.\",\n  \"errors\": {\n    \"name\": [\"The name field is required.\"],\n    \"id\": [\"The id field is required.\"],\n    \"flightNumber\": [\"The flight number field is required.\"],\n    \"date\": [\"The date field is required.\"],\n    \"aircraft\": [\"The aircraft field is required.\"]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
