@@ -1,4 +1,4 @@
-const Field = ({label, name, type = 'text', size = 'md', hint= '', ...args}) => {
+const Field = ({ label, name, type = 'text', size = 'md', hint = '', ...args }) => {
     return (
         <div className={`field ${size}`}>
             <label htmlFor={name}>{label} {hint && <span className={'hint'}>{hint}</span>}</label>

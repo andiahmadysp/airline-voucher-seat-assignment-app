@@ -13,12 +13,17 @@ const ICON_CHECK = (
   </svg>
 );
 
-const Alert = ({ variant = 'danger', title, children }) => {
+const Alert = ({ variant = 'danger', title, messages, children }) => {
   return (
     <div className={`alert ${variant}`} role={variant === 'danger' ? 'alert' : 'status'}>
       {variant === 'danger' ? ICON_WARN : ICON_CHECK}
       <div className="body">
         <div className="title">{title}</div>
+        {messages && (
+          messages.length === 1
+            ? <div>{messages[0]}</div>
+            : <ul>{messages.map((m, i) => <li key={i}>{m}</li>)}</ul>
+        )}
         {children}
       </div>
     </div>
