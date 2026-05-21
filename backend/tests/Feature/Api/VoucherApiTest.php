@@ -19,7 +19,7 @@ class VoucherApiTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJson(['data' => ['exists' => false]]);
+            ->assertJson(['exists' => false]);
     }
 
     public function test_check_returns_true_when_voucher_exists(): void
@@ -35,7 +35,7 @@ class VoucherApiTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJson(['data' => ['exists' => true]]);
+            ->assertJson(['exists' => true]);
     }
 
     public function test_check_returns_422_when_flight_number_invalid(): void
@@ -72,12 +72,10 @@ class VoucherApiTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonStructure([
-                'data' => ['success', 'seats']
-            ])
-            ->assertJson(['data' => ['success' => true]]);
+            ->assertJsonStructure(['success', 'seats'])
+            ->assertJson(['success' => true]);
 
-        $this->assertCount(3, $response->json('data.seats'));
+        $this->assertCount(3, $response->json('seats'));
 
         $this->assertDatabaseHas('vouchers', [
             'flight_number' => 'GA102',
