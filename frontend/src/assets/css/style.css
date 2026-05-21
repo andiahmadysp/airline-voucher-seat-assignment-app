@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #ffffff;
+    --panel: #fafafa;
+    --border: #ececec;
+    --border-strong: #d4d4d4;
+    --text: #0a0a0a;
+    --muted: #737373;
+    --accent: #0a2540;
+    --accent-hover: #15355a;
+    --accent-text: #ffffff;
+    --danger-bg: #fef2f2;
+    --danger-border: #fca5a5;
+    --danger-text: #7f1d1d;
+    --danger-icon: #b91c1c;
+}
+
+#root{
+    width: 100vw;
+    height: 100vh;
+    line-height: 1.5;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+main{
+    max-width: 880px;
+    padding: 80px 32px 80px;
+    margin: 0 auto;
+}
+
+
+.page-header{
+    margin-bottom: 28px;
+}
+
+
+/* form */
+form {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.grid{
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 20px;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field.full{
+    grid-column: 1 / -1;
+}
+
+
+.actions {
+    padding: 14px 24px;
+
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+}
+
+
+/* utils */
+
+h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0;
+}
+label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+input, select {
+    font: inherit;
+    width: 100%;
+    padding: 8px 11px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.btn.btn-ghost:hover {
+    background: var(--panel);
+    color: var(--text);
+}
+.btn.btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border-strong);
+}
+
+.btn:hover {
+    background: var(--accent-hover);
+}
+.btn {
+    font: inherit;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: var(--accent-text);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
